@@ -14,7 +14,7 @@ PASSWORD = os.getenv("DAILY20000PWD")
 SEARCH_CRITERIA = '(UNSEEN)'
 
 # JSON file for storing subscribed users
-SUBSCRIBERS_FILE = 'subscribedUsers.json'
+SUBSCRIBERS_FILE = '/home/csutiperec/daily20000/subscribedUsers.json'
 
 while True:
     try:

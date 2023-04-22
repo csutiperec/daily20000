@@ -15,7 +15,7 @@ smtp_server = smtplib.SMTP('smtp.gmail.com', 587)
 smtp_server.starttls()
 smtp_server.login(USERNAME, PASSWORD)
 
-with open('subscribedUsers.json', 'r') as f:
+with open('/home/csutiperec/daily20000/subscribedUsers.json', 'r') as f:
     subscribers = json.load(f)
 
 # Compose the email message
@@ -27,7 +27,7 @@ message['Subject'] = subject
 message['From'] = sender
 message['Bcc'] = ', '.join(subscribers)
 
-with open('message.html', 'r') as f:
+with open('/home/csutiperec/daily20000/message.html', 'r') as f:
     html = f.read()
 
 chatGPTAnswer = questionAsker.askQuestion()
@@ -38,7 +38,7 @@ text = MIMEText(html, "html")
 message.attach(text)
 
 # Attach the image file
-with open('20000HUF.png', 'rb') as f:
+with open('/home/csutiperec/daily20000/20000HUF.png', 'rb') as f:
     img_data = f.read()
 img_part = MIMEImage(img_data, name='20000HUF.png')
 img_part.add_header('Content-ID', '<deak')
