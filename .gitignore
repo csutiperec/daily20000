@@ -161,4 +161,4 @@ cython_debug/
 
 subscribedUsers.json
 nohup.out
-log.txt
+ss_log.txt

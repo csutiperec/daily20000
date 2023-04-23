@@ -1,45 +1,26 @@
-import json
-import os
-import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from email.mime.image import MIMEImage
-import questionAsker
+import helperFunctions
+import json
+import sys
 
-USERNAME = os.getenv("DAILY20000UNAME")
-PASSWORD = os.getenv("DAILY20000PWD")
-LOCAL_PATH_TO_FOLDER = os.getenv("DAILY20000_PATH") or ''
+LOCAL_PATH_TO_FOLDER = helperFunctions.getLocalPathToFolder()
 
-# Set up the SMTP server
-smtp_server = smtplib.SMTP('smtp.gmail.com', 587)
-smtp_server.starttls()
-smtp_server.login(USERNAME, PASSWORD)
+MESSAGEHTML_FILE = f'{LOCAL_PATH_TO_FOLDER}/assets/message.html'
+SUBSCRIBERS_FILE = f'{LOCAL_PATH_TO_FOLDER}/assets/subscribedUsers.json'
+IMAGE_FILE = f'{LOCAL_PATH_TO_FOLDER}/assets/20000HUF.png'
 
-# Compose the email message
+try:
+    with open(SUBSCRIBERS_FILE, 'r') as f:
+        subscribers = json.load(f)
+        if len(subscribers) == 0:
+            sys.exit()
+except FileNotFoundError:
+    sys.exit()
+
 message = MIMEMultipart('related')
 
-with open(f'{LOCAL_PATH_TO_FOLDER}subscribedUsers.json', 'r') as f:
-    subscribers = json.load(f)
+message.attach(MIMEText(helperFunctions.createDailyChatGPTMessageBody(MESSAGEHTML_FILE), "html"))
+message.attach(helperFunctions.createAttachableImage(IMAGE_FILE, '20000HUF.png', '<deak>'))
 
-message['Subject'] = 'Daily 20000'
-message['From'] = USERNAME
-message['Bcc'] = ', '.join(subscribers)
-
-with open(f'{LOCAL_PATH_TO_FOLDER}message.html', 'r') as f:
-    html = f.read()
-
-chatGPTAnswer = questionAsker.askQuestion()
-
-html = html.replace("$ChatGPTResponse", chatGPTAnswer)
-text = MIMEText(html, "html")
-message.attach(text)
-
-# Attach the image file
-with open(f'{LOCAL_PATH_TO_FOLDER}20000HUF.png', 'rb') as f:
-    img_data = f.read()
-img_part = MIMEImage(img_data, name='20000HUF.png')
-img_part.add_header('Content-ID', '<deak')
-message.attach(img_part)
-
-smtp_server.send_message(message)
-smtp_server.quit()
+helperFunctions.sendEmail('Daily 20000', ', '.join(subscribers), message)
