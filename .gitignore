@@ -162,3 +162,4 @@ cython_debug/
 subscribedUsers.json
 nohup.out
 ss_log.txt
+.DS_Store
