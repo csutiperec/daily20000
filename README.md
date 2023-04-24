@@ -8,7 +8,7 @@ This is a small application where users can subsribe to an email bot that asks C
 
 1. Clone the repo
 2. Create a subscribedUsers.json file with an empty array.
-3. Setup your `OPENAI_API_KEY`, `DAILY20000PWD` and `DAILY20000UNAME` enviroment variables
+3. Setup your `OPENAI_API_KEY`, `DAILY20000PWD`, `DAILY20000UNAME`, `DAILY20000_PATH` enviroment variables
 4. Setup a cron job for sendMail.py for whenever you want to send the messages out
 5. Start subscriptionService.py
 
